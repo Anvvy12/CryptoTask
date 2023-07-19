@@ -1,4 +1,3 @@
-import { ethers } from "ethers";
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import { Web3Provider } from "@ethersproject/providers";
