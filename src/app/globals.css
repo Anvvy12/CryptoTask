@@ -25,3 +25,23 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.main {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.button {
+  width: 150px;
+  height: 70px;
+  background-color: red;
+  color: white;
+  border-radius: 12px;
+}
+
+.balance {
+  display: flex;
+  justify-content: center;
+}
