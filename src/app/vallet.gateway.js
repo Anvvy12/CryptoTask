@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import { Web3Provider } from "@ethersproject/providers";
+import { ethers } from "ethers";
 
 // Функція для перетворення рядка шестнадцяткового числа у десяткове з округленням до другого знака після коми
 function convertHexToDecimal(hexValue) {
@@ -9,7 +10,6 @@ function convertHexToDecimal(hexValue) {
   return roundedValue;
 }
 
-// Функція для підключення до гаманця MetaMask та отримання інформації про баланс
 async function connectToMetaMask() {
   if (window.ethereum) {
     try {
@@ -18,10 +18,13 @@ async function connectToMetaMask() {
       const signer = provider.getSigner();
       const address = await signer.getAddress();
       const balance = await provider.getBalance(address);
-      const tokenBalance = convertHexToDecimal(balance._hex);
+      const tokenBalance = convertHexToDecimal(
+        ethers.formatEther(balance._hex)
+      );
 
       console.log("Підключено до MetaMask!");
       console.log("Адреса гаманця:", address);
+      console.log("баланс hex гаманця:", balance._hex);
       console.log("Баланс гаманця:", tokenBalance);
 
       return { address, tokenBalance };
@@ -37,9 +40,9 @@ async function connectToMetaMask() {
 async function getEthPriceInUSD() {
   try {
     const response = await axios.get(
-      "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
+      "https://whitebit.com/api/v1/public/tickers"
     );
-    const ethPriceInUSD = response.data.ethereum.usd;
+    const ethPriceInUSD = response.result.WBT_USD;
 
     return ethPriceInUSD;
   } catch (error) {
