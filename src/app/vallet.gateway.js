@@ -1,12 +1,13 @@
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import { Web3Provider } from "@ethersproject/providers";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "./contract";
 import { ethers } from "ethers";
 
 // Функція для перетворення рядка шестнадцяткового числа у десяткове з округленням до другого знака після коми
 function convertHexToDecimal(hexValue) {
   const decimalValue = new BigNumber(hexValue).toString(10);
-  const roundedValue = parseFloat(decimalValue).toFixed(2);
+  const roundedValue = parseFloat(decimalValue);
   return roundedValue;
 }
 
@@ -51,14 +52,30 @@ async function getEthPriceInUSD() {
   }
 }
 
-const TransactionLink = (transactionHash) => {
-  const etherscanBaseUrl = `https://etherscan.io/tx/${transactionHash}`;
+// const TransactionLink = (transactionHash) => {
+//   const etherscanBaseUrl = `https://etherscan.io/tx/${transactionHash}`;
 
-  console.log(`etherscanBaseUrl`, etherscanBaseUrl);
-};
+//   console.log(`etherscanBaseUrl`, etherscanBaseUrl);
+// };
 
-TransactionLink(
-  "0xf6d4f689ee7dc9989855a00682e6ef02f90d06023bab16d63befc8a548442724"
-);
+// TransactionLink(
+//   "0xf6d4f689ee7dc9989855a00682e6ef02f90d06023bab16d63befc8a548442724"
+// );
 
 export { getEthPriceInUSD, connectToMetaMask };
+
+const provider = new Web3Provider(window.ethereum);
+const signer = provider.getSigner();
+
+const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+
+async function getContractData() {
+  try {
+    const result = await contract.totalSupply();
+    console.log("Результат:", result);
+  } catch (error) {
+    console.error("Помилка:", error);
+  }
+}
+
+getContractData();
