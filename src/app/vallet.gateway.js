@@ -36,19 +36,29 @@ async function connectToMetaMask() {
   }
 }
 
-// Функція для отримання ціни ETH у доларах
+// Функція для отримання ціни WBT у доларах
 async function getEthPriceInUSD() {
   try {
     const response = await axios.get(
-      "https://whitebit.com/api/v1/public/tickers"
+      "https://api.coingecko.com/api/v3/simple/price?ids=whitebit&vs_currencies=usd"
     );
-    const ethPriceInUSD = response.result.WBT_USD;
+    const ethPriceInUSD = response.data.whitebit.usd;
 
     return ethPriceInUSD;
   } catch (error) {
-    console.error("Помилка при отриманні ціни ETH:", error);
+    console.error("Помилка при отриманні ціни WBT:", error);
     return null;
   }
 }
+
+const TransactionLink = (transactionHash) => {
+  const etherscanBaseUrl = `https://etherscan.io/tx/${transactionHash}`;
+
+  console.log(`etherscanBaseUrl`, etherscanBaseUrl);
+};
+
+TransactionLink(
+  "0xf6d4f689ee7dc9989855a00682e6ef02f90d06023bab16d63befc8a548442724"
+);
 
 export { getEthPriceInUSD, connectToMetaMask };
