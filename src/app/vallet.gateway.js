@@ -64,18 +64,18 @@ async function getEthPriceInUSD() {
 
 export { getEthPriceInUSD, connectToMetaMask };
 
-const provider = new Web3Provider(window.ethereum);
-const signer = provider.getSigner();
+// const provider = new Web3Provider(window.ethereum);
+// const signer = provider.getSigner();
 
-const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+// const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 
-async function getContractData() {
-  try {
-    const result = await contract.totalSupply();
-    console.log("Результат:", result);
-  } catch (error) {
-    console.error("Помилка:", error);
-  }
-}
+// async function getContractData() {
+//   try {
+//     const result = await contract.totalSupply();
+//     console.log("Результат:", result);
+//   } catch (error) {
+//     console.error("Помилка:", error);
+//   }
+// }
 
-getContractData();
+// getContractData();
