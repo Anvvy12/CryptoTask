@@ -4,7 +4,7 @@ import { Web3Provider } from "@ethersproject/providers";
 import { CONTRACT_ABI, CONTRACT_ADDRESS } from "./contract-data";
 import { ethers } from "ethers";
 
-// Функція для перетворення рядка шестнадцяткового числа у десяткове з округленням до другого знака після коми
+// Функція для перетворення рядка шестнадцяткового числа у десяткове
 function convertHexToDecimal(hexValue) {
   const decimalValue = new BigNumber(hexValue).toString(10);
   const roundedValue = parseFloat(decimalValue);
@@ -64,17 +64,17 @@ async function getEthPriceInUSD() {
 
 export { getEthPriceInUSD, connectToMetaMask };
 
-async function getContractData() {
-  const provider = new Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
+// async function getContractData() {
+//   const provider = new Web3Provider(window.ethereum);
+//   const signer = provider.getSigner();
 
-  const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-  try {
-    const result = await contract.totalSupply();
-    console.log("Результат:", result);
-  } catch (error) {
-    console.error("Помилка:", error);
-  }
-}
+//   const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+//   try {
+//     const result = await contract.totalSupply();
+//     console.log("Результат:", result);
+//   } catch (error) {
+//     console.error("Помилка:", error);
+//   }
+// }
 
-getContractData();
+// getContractData();
