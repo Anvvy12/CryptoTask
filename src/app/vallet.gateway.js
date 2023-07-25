@@ -1,7 +1,7 @@
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import { Web3Provider } from "@ethersproject/providers";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "./contract";
+import { CONTRACT_ABI, CONTRACT_ADDRESS } from "./contract-data";
 import { ethers } from "ethers";
 
 // Функція для перетворення рядка шестнадцяткового числа у десяткове з округленням до другого знака після коми
@@ -41,13 +41,13 @@ async function connectToMetaMask() {
 async function getEthPriceInUSD() {
   try {
     const response = await axios.get(
-      "https://api.coingecko.com/api/v3/simple/price?ids=whitebit&vs_currencies=usd"
+      "https://api.coingecko.com/api/v3/simple/price?ids=ethereum&vs_currencies=usd"
     );
-    const ethPriceInUSD = response.data.whitebit.usd;
+    const ethPriceInUSD = response.data.ethereum.usd;
 
     return ethPriceInUSD;
   } catch (error) {
-    console.error("Помилка при отриманні ціни WBT:", error);
+    console.error("Помилка при отриманні ціни ETH:", error);
     return null;
   }
 }
@@ -64,18 +64,17 @@ async function getEthPriceInUSD() {
 
 export { getEthPriceInUSD, connectToMetaMask };
 
-// const provider = new Web3Provider(window.ethereum);
-// const signer = provider.getSigner();
+async function getContractData() {
+  const provider = new Web3Provider(window.ethereum);
+  const signer = provider.getSigner();
 
-// const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+  const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
+  try {
+    const result = await contract.totalSupply();
+    console.log("Результат:", result);
+  } catch (error) {
+    console.error("Помилка:", error);
+  }
+}
 
-// async function getContractData() {
-//   try {
-//     const result = await contract.totalSupply();
-//     console.log("Результат:", result);
-//   } catch (error) {
-//     console.error("Помилка:", error);
-//   }
-// }
-
-// getContractData();
+getContractData();

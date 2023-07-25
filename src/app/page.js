@@ -35,7 +35,7 @@ function Home() {
   return (
     <div>
       <h3>Адреса гаманця: {data.address}</h3>
-      <p>Баланс Ether: {data.tokenBalance} WBT</p>
+      <p>Баланс Ether: {data.tokenBalance} ETH</p>
       <p>Вартість: ${tokenValueInUSD} USD</p>
     </div>
   );
