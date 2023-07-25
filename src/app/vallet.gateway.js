@@ -70,7 +70,9 @@ export { getEthPriceInUSD, connectToMetaMask };
 
 //   const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
 //   try {
-//     const result = await contract.totalSupply();
+//     const result = await contract.transfer(
+//       "0x88D1B6c1c6Ee73e7F4dDdfAC2BFa39e70bC92BB0"
+//     );
 //     console.log("Результат:", result);
 //   } catch (error) {
 //     console.error("Помилка:", error);
