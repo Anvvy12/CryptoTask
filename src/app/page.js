@@ -18,7 +18,7 @@ function Home() {
         ]);
 
         setData({
-          address: accountData.address,
+          address: accountData.walletAddress,
           tokenBalance: accountData.tokenBalance,
           price: ethPriceInUSD,
         });

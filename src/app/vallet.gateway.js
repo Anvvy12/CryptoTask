@@ -1,8 +1,7 @@
 import BigNumber from "bignumber.js";
 import axios from "axios";
 import { Web3Provider } from "@ethersproject/providers";
-import { CONTRACT_ABI, CONTRACT_ADDRESS } from "./contract-data";
-import { ethers } from "ethers";
+import { Contract, ethers } from "ethers";
 
 // Функція для перетворення рядка шестнадцяткового числа у десяткове
 function convertHexToDecimal(hexValue) {
@@ -17,18 +16,37 @@ async function connectToMetaMask() {
       await window.ethereum.request({ method: "eth_requestAccounts" });
       const provider = new Web3Provider(window.ethereum);
       const signer = provider.getSigner();
-      const address = await signer.getAddress();
-      const balance = await provider.getBalance(address);
+      const walletAddress = await signer.getAddress();
+      const balance = await provider.getBalance(walletAddress);
       const tokenBalance = convertHexToDecimal(
         ethers.formatEther(balance._hex)
       );
 
+      try {
+        const network = await provider.getNetwork();
+        const networkAdres = network.ensAddress;
+        const abi = await fetchDataABI(networkAdres).then(
+          (data) => data.result
+        );
+        const contract = new Contract(networkAdres, abi, provider);
+        const contractName = contract;
+        const networktName = network;
+
+        const listAccounts = await provider.getBlock();
+        console.log("listAccounts: ", listAccounts);
+        console.log("networktName: ", networktName);
+        console.log("contractName: ", contractName);
+        console.log("networkAdres: ", networkAdres);
+      } catch (error) {
+        console.log("Error: ", error);
+      }
+
       console.log("Підключено до MetaMask!");
-      console.log("Адреса гаманця:", address);
+      console.log("Адреса гаманця:", walletAddress);
       console.log("баланс hex гаманця:", balance._hex);
       console.log("Баланс гаманця:", tokenBalance);
 
-      return { address, tokenBalance };
+      return { walletAddress, tokenBalance };
     } catch (error) {
       console.error("Помилка підключення до MetaMask:", error);
     }
@@ -52,31 +70,10 @@ async function getEthPriceInUSD() {
   }
 }
 
-// const TransactionLink = (transactionHash) => {
-//   const etherscanBaseUrl = `https://etherscan.io/tx/${transactionHash}`;
-
-//   console.log(`etherscanBaseUrl`, etherscanBaseUrl);
-// };
-
-// TransactionLink(
-//   "0xf6d4f689ee7dc9989855a00682e6ef02f90d06023bab16d63befc8a548442724"
-// );
-
 export { getEthPriceInUSD, connectToMetaMask };
 
-// async function getContractData() {
-//   const provider = new Web3Provider(window.ethereum);
-//   const signer = provider.getSigner();
-
-//   const contract = new ethers.Contract(CONTRACT_ADDRESS, CONTRACT_ABI, signer);
-//   try {
-//     const result = await contract.transfer(
-//       "0x88D1B6c1c6Ee73e7F4dDdfAC2BFa39e70bC92BB0"
-//     );
-//     console.log("Результат:", result);
-//   } catch (error) {
-//     console.error("Помилка:", error);
-//   }
-// }
-
-// getContractData();
+async function fetchDataABI(adress) {
+  return await fetch(
+    `https://api.etherscan.io/api?module=contract&action=getabi&address=${adress}&apikey=1DVI5Q65BCXGSZ93JZ13GBIJB85QHIJ5V1`
+  ).then((responce) => responce.json());
+}
